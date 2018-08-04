@@ -9,10 +9,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import br.inatel.lydia.helloworldturbo.fragments.ListaPedidosFragment;
+import br.inatel.lydia.helloworldturbo.fragments.SettingsFragment;
 import br.inatel.lydia.helloworldturbo.fragments.Tela1Fragment;
 
 public class MainActivity extends AppCompatActivity
@@ -49,28 +49,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -96,6 +74,10 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_tela2:
                     fragmentClass = ListaPedidosFragment.class;
+                    fragment = (Fragment) fragmentClass.newInstance();
+                    break;
+                case R.id.nav_settings:
+                    fragmentClass = SettingsFragment.class;
                     fragment = (Fragment) fragmentClass.newInstance();
                     break;
                 default:
