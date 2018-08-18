@@ -32,6 +32,7 @@ public class Tela1Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tela1, container, false);
+        getActivity().setTitle("HelloWorldTurbo");
 
         editText1 = (EditText) rootView.findViewById(R.id.editText1);
         button1 = (Button) rootView.findViewById(R.id.button1);

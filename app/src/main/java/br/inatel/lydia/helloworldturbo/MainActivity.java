@@ -2,6 +2,9 @@ package br.inatel.lydia.helloworldturbo;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import br.inatel.lydia.helloworldturbo.fragments.ListaPedidosFragment;
+import br.inatel.lydia.helloworldturbo.fragments.OrdersFragment;
 import br.inatel.lydia.helloworldturbo.fragments.SettingsFragment;
 import br.inatel.lydia.helloworldturbo.fragments.Tela1Fragment;
 
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             displayFragment(R.id.nav_tela1);
         }
+
+        createNotificationChannel();
     }
 
     @Override
@@ -73,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                     fragment = (Fragment) fragmentClass.newInstance();
                     break;
                 case R.id.nav_tela2:
-                    fragmentClass = ListaPedidosFragment.class;
+                    fragmentClass = OrdersFragment.class;
                     fragment = (Fragment) fragmentClass.newInstance();
                     break;
                 case R.id.nav_settings:
@@ -96,5 +102,15 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", "SiecolaVendas", importance);
+            channel.setDescription("Orders");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
