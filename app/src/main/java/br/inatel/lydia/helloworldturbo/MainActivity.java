@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,13 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import br.inatel.lydia.helloworldturbo.fragments.GCMFragment;
 import br.inatel.lydia.helloworldturbo.fragments.ListaPedidosFragment;
 import br.inatel.lydia.helloworldturbo.fragments.OrdersFragment;
 import br.inatel.lydia.helloworldturbo.fragments.SettingsFragment;
 import br.inatel.lydia.helloworldturbo.fragments.Tela1Fragment;
+import br.inatel.lydia.helloworldturbo.models.OrderInfo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private OrderInfo orderInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState == null) {
+        Intent intent = this.getIntent();
+        if (intent.hasExtra("orderInfo")) {
+            orderInfo = (OrderInfo) intent.getSerializableExtra("orderInfo");
+
+            if (orderInfo != null) {
+                displayFragment(R.id.nav_gcm);
+            }
+        } else if (savedInstanceState == null) {
             displayFragment(R.id.nav_tela1);
         }
 
@@ -86,6 +98,16 @@ public class MainActivity extends AppCompatActivity
                     fragmentClass = SettingsFragment.class;
                     fragment = (Fragment) fragmentClass.newInstance();
                     break;
+                case R.id.nav_gcm:
+                    fragmentClass = GCMFragment.class;
+                    fragment = (Fragment) fragmentClass.newInstance();
+                    if (orderInfo != null) {
+                        Bundle args = new Bundle();
+                        args.putSerializable("orderInfo", orderInfo);
+                        fragment.setArguments(args);
+                        orderInfo = null;
+                    }
+                    break;
                 default:
                     fragmentClass = Tela1Fragment.class;
                     fragment = (Fragment) fragmentClass.newInstance();
@@ -103,6 +125,19 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent.hasExtra("orderInfo")) {
+            orderInfo = (OrderInfo) intent.getSerializableExtra("orderInfo");
+
+            if (orderInfo != null) {
+                displayFragment(R.id.nav_gcm);
+            }
+        }
+        super.onNewIntent(intent);
+    }
+
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
